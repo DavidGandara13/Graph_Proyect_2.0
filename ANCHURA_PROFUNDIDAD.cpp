@@ -3,42 +3,15 @@
 #include <queue>
 #include <unordered_set>
 #include <stack>
+#include <unordered_map>
 
 using namespace std;
 
-
-vector<vector<string>> listaAdyacencia;
+unordered_map<string, vector<string>> listaAdyacencia;
 
 void agregarArista(const string& nodoOrigen, const string& nodoDestino) {
-    bool encontradoOrigen = false;
-    bool encontradoDestino = false;
-	
-	 for (auto& nodo : listaAdyacencia) {
-        if (nodo[0] == nodoOrigen) {
-            nodo.push_back(nodoDestino);
-            encontradoOrigen = true;
-        } else if (nodo[0] == nodoDestino) {
-            nodo.push_back(nodoOrigen);
-            encontradoDestino = true;
-        }
-
-        if (encontradoOrigen && encontradoDestino) {
-            break;
-        }
-    }
-
-
-    if (!encontradoOrigen) {
-        listaAdyacencia.push_back({nodoOrigen, nodoDestino});
-    }
-
-
-    if (!encontradoDestino) {
-        listaAdyacencia.push_back({nodoDestino, nodoOrigen});
-    }
+    listaAdyacencia[nodoOrigen].push_back(nodoDestino);
 }
-		
-
 
 bool BFS(const string& nodoInicial, const string& nodoFinal) {
     queue<string> cola;
@@ -58,14 +31,10 @@ bool BFS(const string& nodoInicial, const string& nodoFinal) {
         }
 
         // Obtener nodos adyacentes y agregarlos a la cola si no han sido visitados
-        for (const auto& vecino : listaAdyacencia) {
-            if (vecino[0] == nodoActual) {
-                for (size_t i = 1; i < vecino.size(); ++i) {
-                    if (visitados.find(vecino[i]) == visitados.end()) {
-                        cola.push(vecino[i]);
-                        visitados.insert(vecino[i]);
-                    }
-                }
+        for (const auto& vecino : listaAdyacencia[nodoActual]) {
+            if (visitados.find(vecino) == visitados.end()) {
+                cola.push(vecino);
+                visitados.insert(vecino);
             }
         }
     }
@@ -86,20 +55,16 @@ bool DFS(const string& nodoInicial, const string& nodoFinal) {
         pila.pop();
         cout << nodoActual << " ";
 
-        // Si se alcanza el nodo final, terminar el BFS
+        // Si se alcanza el nodo final, terminar el DFS
         if (nodoActual == nodoFinal) {
             return true;
         }
 
-        // Obtener nodos adyacentes y agregarlos a la cola si no han sido visitados
-        for (const auto& vecino : listaAdyacencia) {
-            if (vecino[0] == nodoActual) {
-                for (size_t i = 1; i < vecino.size(); ++i) {
-                    if (visitados.find(vecino[i]) == visitados.end()) {
-                        pila.push(vecino[i]);
-                        visitados.insert(vecino[i]);
-                    }
-                }
+        // Obtener nodos adyacentes y agregarlos a la pila si no han sido visitados
+        for (const auto& vecino : listaAdyacencia[nodoActual]) {
+            if (visitados.find(vecino) == visitados.end()) {
+                pila.push(vecino);
+                visitados.insert(vecino);
             }
         }
     }
@@ -109,7 +74,9 @@ bool DFS(const string& nodoInicial, const string& nodoFinal) {
 }
 
 
+
 int main(){
+
 	
 	
 	agregarArista("Rochester", "SF");
@@ -159,6 +126,9 @@ int main(){
         
     return 0;
 }
+
+
+
 
 
 
