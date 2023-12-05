@@ -8,7 +8,7 @@ class Grafobipartido {
 public:
     Grafobipartido(int vertices);
     void agregarArista(int u, int v);
-    void encontrarEmparejamiento();
+    void encontrarEmparejamientobipartido();
 
 private:
     int vertices;
@@ -37,7 +37,7 @@ bool Grafobipartido::buscarCaminoAumento(int u) {
         if (!visitado[v]) {
             visitado[v] = true;
 
-            // Si el vÈrtice no est· emparejado o se puede encontrar un camino de aumento
+            // Si el v√©rtice no est√° emparejado o se puede encontrar un camino de aumento
             if (pareja[v] == -1 || buscarCaminoAumento(pareja[v])) {
                 pareja[v] = u;
                 return true;
@@ -47,19 +47,19 @@ bool Grafobipartido::buscarCaminoAumento(int u) {
     return false;
 }
 
-void Grafobipartido::encontrarEmparejamiento() {
-    // Reiniciar el conjunto de vÈrtices visitados para cada vÈrtice nuevo
+void Grafobipartido::encontrarEmparejamientobipartido() {
+    // Reiniciar el conjunto de v√©rtices visitados para cada v√©rtice nuevo
     visitado.assign(vertices, false);
 
-    // Intentar encontrar un camino de aumento desde cada vÈrtice del primer conjunto
+    // Intentar encontrar un camino de aumento desde cada v√©rtice del primer conjunto
     for (int i = 0; i < vertices; ++i) {
         if (pareja[i] == -1) {
             buscarCaminoAumento(i);
         }
     }
 
-    // Mostrar el emparejamiento m·ximo
-    cout << "Emparejamiento del grafo bipartido:" << endl;
+    // Mostrar el emparejamiento m√°ximo
+    cout << "Emparejamiento bipartido:" << endl;
     for (int i = 0; i < vertices; ++i) {
         if (pareja[i] != -1) {
             cout << "(" << pareja[i] << " -> " << i << ")" << endl;
@@ -76,8 +76,9 @@ int main() {
     grafo.agregarArista(2, 4);
     grafo.agregarArista(3, 5);
 
-    grafo.encontrarEmparejamiento();
+    grafo.encontrarEmparejamientobipartido();
 
     return 0;
 }
+
 
